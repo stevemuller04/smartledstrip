@@ -1,0 +1,14 @@
+#define LEDSTRIP_PIN D4
+#define LEDSTRIP_NUMPIXELS 150
+#define LEDSTRIP_MODE NEO_GRB + NEO_KHZ800
+
+#define ANIMATION_FASTFADE_DURATION 1000
+
+#define MQTT_HOST ""
+#define MQTT_PORT 1883
+#define MQTT_TOPIC_PREFIX "ledstrip/"
+#define MQTT_TOPIC_COLOR1 "color1"
+#define MQTT_TOPIC_COLOR2 "color2"
+#define MQTT_TOPIC_INTERVAL "interval"
+#define MQTT_USERNAME ""
+#define MQTT_PASSWORD ""
