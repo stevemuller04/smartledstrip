@@ -1,17 +1,5 @@
 #include "Helper.h"
 
-String Helper::rawDataToString(byte *raw, unsigned int length)
-{
-	char *copy = new char[length + 1];
-	memcpy(raw, copy, length);
-	copy[length] = 0;
-
-	String s = String(copy);
-	delete[] copy;
-
-	return s;
-}
-
 uint32_t Helper::deserializeColor(String s)
 {
 	s.replace("#", "");
@@ -23,10 +11,37 @@ uint32_t Helper::deserializeInt(String s)
 	return strtoul(s.c_str(), NULL, 10);
 }
 
+uint32_t Helper::deserializeColor(byte *bytes, unsigned int length)
+{
+	char *copy = new char[length + 1];
+	memcpy(copy, bytes, length);
+	copy[length] = 0;
+
+	if (copy[0] == '#')
+		++copy;
+
+	uint32_t i = strtoul(copy, NULL, 16);
+	delete[] copy;
+
+	return i;
+}
+
+uint32_t Helper::deserializeInt(byte *bytes, unsigned int length)
+{
+	char *copy = new char[length + 1];
+	memcpy(copy, bytes, length);
+	copy[length] = 0;
+
+	uint32_t i = strtoul(copy, NULL, 10);
+	delete[] copy;
+
+	return i;
+}
+
 String Helper::serializeColor(uint32_t value)
 {
 	String s = "000000000" + String(value, HEX);
-	return s.substring(s.length() - 6);
+	return String("#") + s.substring(s.length() - 6);
 }
 
 String Helper::serializeInt(uint32_t value)

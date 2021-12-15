@@ -5,12 +5,14 @@
 #include "AnimationQueue.h"
 #include "Control.h"
 #include "HttpUi.h"
+#include "MqttUi.h"
 #include "Settings.h"
 
 LedStrip ledstrip(LEDSTRIP_NUMPIXELS, LEDSTRIP_PIN, LEDSTRIP_MODE);
 AnimationQueue animationQueue(&ledstrip);
 Control control(&animationQueue, ANIMATION_FASTFADE_DURATION);
 HttpUi http_ui(&control);
+MqttUi mqtt_ui(&control, MQTT_HOSTNAME, MQTT_PORT, MQTT_CONNECT_TRY_INTERVAL, MQTT_CLIENT_ID, MQTT_USERNAME, MQTT_PASSWORD, MQTT_TOPIC_PREFIX);
 
 void setup()
 {
@@ -25,6 +27,7 @@ void setup()
 	wifiManager.autoConnect("LED Strip");
 
 	http_ui.begin();
+	mqtt_ui.begin();
 
 	Settings settings = control.getSettings();
 	animationQueue.addAnimation(settings.color1, settings.fade_duration, true);
@@ -34,6 +37,7 @@ void setup()
 void loop()
 {
 	http_ui.loop();
+	mqtt_ui.loop();
 	animationQueue.loop();
 	ledstrip.loop();
 	yield();

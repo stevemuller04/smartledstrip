@@ -35,7 +35,7 @@ void HttpUi::_handleApiGetConfig()
 	String color1 = Helper::serializeColor(settings.color1);
 	String color2 = Helper::serializeColor(settings.color2);
 	String fade_duration = Helper::serializeInt(settings.fade_duration);
-	_server.send(200, "text/json", "{\"color1\":\"#" + color1 + "\",\"color2\":\"#" + color2 + "\",\"fade_duration\":" + fade_duration + "}");
+	_server.send(200, "text/json", "{\"color1\":\"" + color1 + "\",\"color2\":\"" + color2 + "\",\"fade_duration\":" + fade_duration + "}");
 }
 
 void HttpUi::_handleApiSetConfig()

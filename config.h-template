@@ -4,11 +4,10 @@
 
 #define ANIMATION_FASTFADE_DURATION 1000
 
-#define MQTT_HOST ""
+#define MQTT_HOSTNAME ""
 #define MQTT_PORT 1883
-#define MQTT_TOPIC_PREFIX "ledstrip/"
-#define MQTT_TOPIC_COLOR1 "color1"
-#define MQTT_TOPIC_COLOR2 "color2"
-#define MQTT_TOPIC_INTERVAL "interval"
+#define MQTT_CONNECT_TRY_INTERVAL 10000
+#define MQTT_CLIENT_ID "ledstrip"
 #define MQTT_USERNAME ""
 #define MQTT_PASSWORD ""
+#define MQTT_TOPIC_PREFIX "ledstrip/"
