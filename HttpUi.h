@@ -1,18 +1,15 @@
 #ifndef INCLUDE_SRC_HTTPUI_H
 #define INCLUDE_SRC_HTTPUI_H
 
-#include "Settings.h"
-#include "AnimationQueue.h"
+#include "Control.h"
 #include <ESP8266WebServer.h>
 
 class HttpUi
 {
 	private:
 
-		Settings *_settings;
-		AnimationQueue *_animationQueue;
+		Control *_control;
 		ESP8266WebServer _server;
-		uint32_t _animation_fastfade_duration;
 
 		void _handleRoot();
 		void _handleApiSetConfig();
@@ -23,7 +20,7 @@ class HttpUi
 
 	public:
 
-		HttpUi(Settings *settings, AnimationQueue *animationQueue, uint32_t animation_fastfade_duration);
+		HttpUi(Control *control);
 		void begin();
 		void loop();
 };

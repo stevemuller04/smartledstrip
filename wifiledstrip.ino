@@ -1,35 +1,40 @@
 #include <WiFiManager.h>
 #include "config.h"
 
-#include "Settings.h"
 #include "LedStrip.h"
 #include "AnimationQueue.h"
+#include "Control.h"
 #include "HttpUi.h"
+#include "Settings.h"
 
-Settings settings;
 LedStrip ledstrip(LEDSTRIP_NUMPIXELS, LEDSTRIP_PIN, LEDSTRIP_MODE);
-AnimationQueue anim(&ledstrip);
-HttpUi ui(&settings, &anim, ANIMATION_FASTFADE_DURATION);
+AnimationQueue animationQueue(&ledstrip);
+Control control(&animationQueue, ANIMATION_FASTFADE_DURATION);
+HttpUi http_ui(&control);
 
-void setup() {
+void setup()
+{
 	//Serial.begin(9600);
 
-	settings.begin();
+	control.begin();
 	ledstrip.begin();
-	anim.begin();
+	animationQueue.begin();
 
 	WiFiManager wifiManager;
 	wifiManager.setHostname("LEDSTRIP");
 	wifiManager.autoConnect("LED Strip");
 
-	ui.begin();
+	http_ui.begin();
 
-	anim.addAnimation(settings.color1, settings.fade_duration, true);
-	anim.addAnimation(settings.color2, settings.fade_duration, true);
+	Settings settings = control.getSettings();
+	animationQueue.addAnimation(settings.color1, settings.fade_duration, true);
+	animationQueue.addAnimation(settings.color2, settings.fade_duration, true);
 }
 
-void loop() {
-	ui.loop();
-	anim.loop();
+void loop()
+{
+	http_ui.loop();
+	animationQueue.loop();
 	ledstrip.loop();
+	yield();
 }
