@@ -13,10 +13,6 @@ class MqttUi
 		WiFiClient _client_wifi;
 		PubSubClient _client;
 		uint32_t _connect_try_interval;
-		char *_client_id;
-		char *_username;
-		char *_password;
-		String _topic_prefix;
 		uint32_t _last_reconnect_time;
 
 		void _handleMqtt(char* topic, byte* payload, unsigned int length);
@@ -24,7 +20,7 @@ class MqttUi
 		bool _reconnect();
 
 	public:
-		MqttUi(Control *control, char *hostname, uint16_t port, uint32_t connect_try_interval, char *client_id, char *username, char *password, char *topic_prefix);
+		MqttUi(Control *control, uint32_t connect_try_interval);
 		void begin();
 		void loop();
 };
