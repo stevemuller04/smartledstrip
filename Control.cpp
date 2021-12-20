@@ -34,6 +34,7 @@ void Control::addSettingsChangedHandler(SettingsChangedHandler handler)
 
 void Control::applySettings(Settings settings)
 {
+	Settings old_settings = settings;
 	_settings = settings;
 	saveSettings();
 
@@ -43,7 +44,7 @@ void Control::applySettings(Settings settings)
 	_animation_queue->addAnimation(settings.color1, settings.fade_duration, true);
 
 	for (int i = 0; i < _handlers.size(); ++i)
-		_handlers.get(i)(settings);
+		_handlers.get(i)(old_settings, settings);
 }
 
 Settings Control::getSettings()

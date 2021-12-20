@@ -10,7 +10,7 @@ MqttUi::MqttUi(Control *control, uint32_t connect_try_interval) :
 {
 	_client.setServer(MQTT_HOSTNAME, MQTT_PORT);
 	_client.setCallback([this] (char* topic, byte* payload, unsigned int length) { this->_handleMqtt(topic, payload, length); });
-	_control->addSettingsChangedHandler([this] (Settings s) { this->_handleSettingsChanged(s); });
+	_control->addSettingsChangedHandler([this] (Settings o, Settings n) { this->_handleSettingsChanged(o, n, false); });
 }
 
 void MqttUi::begin()
@@ -35,7 +35,7 @@ bool MqttUi::_reconnect()
 	if (success)
 	{
 		Serial.println("*mqtt: Connected");
-		this->_handleSettingsChanged(_control->getSettings());
+		_handleSettingsChanged(Settings{}, _control->getSettings(), true);
 		_client.subscribe(MQTT_TOPIC_SUB_COLOR1);
 		_client.subscribe(MQTT_TOPIC_SUB_COLOR2);
 		_client.subscribe(MQTT_TOPIC_SUB_FADE_DURATION);
@@ -48,15 +48,18 @@ bool MqttUi::_reconnect()
 	}
 }
 
-void MqttUi::_handleSettingsChanged(Settings s)
+void MqttUi::_handleSettingsChanged(Settings old_settings, Settings new_settings, bool publish_all)
 {
 	if (_client.connected())
 	{
 		Serial.println("*mqtt: publishing changed settings");
-		Settings settings = _control->getSettings();
-		_client.publish(MQTT_TOPIC_PUB_COLOR1, Helper::serializeColor(settings.color1).c_str(), true);
-		_client.publish(MQTT_TOPIC_PUB_COLOR2, Helper::serializeColor(settings.color2).c_str(), true);
-		_client.publish(MQTT_TOPIC_PUB_FADE_DURATION, Helper::serializeInt(settings.fade_duration).c_str(), true);
+
+		if (publish_all || old_settings.color1 != new_settings.color1)
+			_client.publish(MQTT_TOPIC_PUB_COLOR1, Helper::serializeColor(new_settings.color1).c_str(), true);
+		if (publish_all || old_settings.color2 != new_settings.color2)
+			_client.publish(MQTT_TOPIC_PUB_COLOR2, Helper::serializeColor(new_settings.color2).c_str(), true);
+		if (publish_all || old_settings.fade_duration != new_settings.fade_duration)
+			_client.publish(MQTT_TOPIC_PUB_FADE_DURATION, Helper::serializeInt(new_settings.fade_duration).c_str(), true);
 	}
 	else
 	{

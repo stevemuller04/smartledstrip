@@ -16,7 +16,7 @@ class MqttUi
 		uint32_t _last_reconnect_time;
 
 		void _handleMqtt(char* topic, byte* payload, unsigned int length);
-		void _handleSettingsChanged(Settings settings);
+		void _handleSettingsChanged(Settings old_settings, Settings new_settings, bool publish_all);
 		bool _reconnect();
 
 	public:

@@ -7,7 +7,7 @@
 #include <ESP_EEPROM.h>
 #include <functional>
 
-using SettingsChangedHandler = std::function<void(Settings)>;
+using SettingsChangedHandler = std::function<void(Settings, Settings)>;
 
 class Control
 {
