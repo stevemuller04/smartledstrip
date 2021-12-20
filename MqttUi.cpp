@@ -56,7 +56,7 @@ void MqttUi::_handleSettingsChanged(Settings s)
 		Settings settings = _control->getSettings();
 		_client.publish(MQTT_TOPIC_PUB_COLOR1, Helper::serializeColor(settings.color1).c_str(), true);
 		_client.publish(MQTT_TOPIC_PUB_COLOR2, Helper::serializeColor(settings.color2).c_str(), true);
-		_client.publish(MQTT_TOPIC_PUB_FADE_DURATION, Helper::serializeColor(settings.fade_duration).c_str(), true);
+		_client.publish(MQTT_TOPIC_PUB_FADE_DURATION, Helper::serializeInt(settings.fade_duration).c_str(), true);
 	}
 	else
 	{
