@@ -17,10 +17,11 @@ uint32_t Helper::deserializeColor(byte *bytes, unsigned int length)
 	memcpy(copy, bytes, length);
 	copy[length] = 0;
 
-	if (copy[0] == '#')
-		++copy;
+	char *dst = copy;
+	if (dst[0] == '#')
+		++dst;
 
-	uint32_t i = strtoul(copy, NULL, 16);
+	uint32_t i = strtoul(dst, NULL, 16);
 	delete[] copy;
 
 	return i;
