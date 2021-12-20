@@ -65,9 +65,9 @@ void MqttUi::_handleSettingsChanged(Settings s)
 	{
 		Serial.println("*mqtt: publishing changed settings");
 		Settings settings = _control->getSettings();
-		_client.publish((_topic_prefix + "COLOR1").c_str(), Helper::serializeColor(settings.color1).c_str());
-		_client.publish((_topic_prefix + "COLOR2").c_str(), Helper::serializeColor(settings.color2).c_str());
-		_client.publish((_topic_prefix + "FADE_DURATION").c_str(), Helper::serializeColor(settings.fade_duration).c_str());
+		_client.publish((_topic_prefix + "COLOR1").c_str(), Helper::serializeColor(settings.color1).c_str(), true);
+		_client.publish((_topic_prefix + "COLOR2").c_str(), Helper::serializeColor(settings.color2).c_str(), true);
+		_client.publish((_topic_prefix + "FADE_DURATION").c_str(), Helper::serializeColor(settings.fade_duration).c_str(), true);
 	}
 	else
 	{
