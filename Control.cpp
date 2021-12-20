@@ -8,22 +8,34 @@ Control::Control(AnimationQueue *animation_queue, uint32_t animation_fastfade_du
 
 void Control::begin()
 {
-	EEPROM.begin(12);
+	EEPROM.begin(1 + sizeof(Settings));
 	loadSettings();
 }
 
 void Control::loadSettings()
 {
-	EEPROM.get(0, _settings.color1);
-	EEPROM.get(4, _settings.color2);
-	EEPROM.get(8, _settings.fade_duration);
+	uint8_t version = 0xFF;
+	EEPROM.get(0, version);
+
+	switch (version)
+	{
+		case 1:
+			EEPROM.get(1, _settings.color1);
+			EEPROM.get(5, _settings.color2);
+			EEPROM.get(9, _settings.fade_duration);
+			break;
+		default:
+			_settings = Settings::default_settings;
+			break;
+	}
 }
 
 void Control::saveSettings()
 {
-	EEPROM.put(0, _settings.color1);
-	EEPROM.put(4, _settings.color2);
-	EEPROM.put(8, _settings.fade_duration);
+	EEPROM.put(0, 0x01); // version
+	EEPROM.put(1, _settings.color1);
+	EEPROM.put(5, _settings.color2);
+	EEPROM.put(9, _settings.fade_duration);
 	EEPROM.commit();
 }
 
