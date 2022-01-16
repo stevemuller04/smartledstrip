@@ -23,6 +23,7 @@ void Control::loadSettings()
 			EEPROM.get(1, _settings.color1);
 			EEPROM.get(5, _settings.color2);
 			EEPROM.get(9, _settings.fade_duration);
+			EEPROM.get(13, _settings.power);
 			break;
 		default:
 			_settings = Settings::default_settings;
@@ -36,6 +37,7 @@ void Control::saveSettings()
 	EEPROM.put(1, _settings.color1);
 	EEPROM.put(5, _settings.color2);
 	EEPROM.put(9, _settings.fade_duration);
+	EEPROM.put(13, _settings.power);
 	EEPROM.commit();
 }
 

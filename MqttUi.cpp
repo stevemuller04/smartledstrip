@@ -39,6 +39,7 @@ bool MqttUi::_reconnect()
 		_client.subscribe(MQTT_TOPIC_SUB_COLOR1);
 		_client.subscribe(MQTT_TOPIC_SUB_COLOR2);
 		_client.subscribe(MQTT_TOPIC_SUB_FADE_DURATION);
+		_client.subscribe(MQTT_TOPIC_SUB_POWER);
 		return true;
 	}
 	else
@@ -60,6 +61,8 @@ void MqttUi::_handleSettingsChanged(Settings old_settings, Settings new_settings
 			_client.publish(MQTT_TOPIC_PUB_COLOR2, Helper::serializeColor(new_settings.color2).c_str(), true);
 		if (publish_all || old_settings.fade_duration != new_settings.fade_duration)
 			_client.publish(MQTT_TOPIC_PUB_FADE_DURATION, Helper::serializeInt(new_settings.fade_duration).c_str(), true);
+		if (publish_all || old_settings.power != new_settings.power)
+			_client.publish(MQTT_TOPIC_PUB_POWER, Helper::serializeInt(new_settings.power).c_str(), true);
 	}
 	else
 	{
@@ -86,6 +89,12 @@ void MqttUi::_handleMqtt(char* topic, byte* payload, unsigned int length)
 	{
 		Settings settings = _control->getSettings();
 		settings.fade_duration = Helper::deserializeInt(payload, length);
+		_control->applySettings(settings);
+	}
+	else if (strcmp(MQTT_TOPIC_SUB_POWER, topic) == 0)
+	{
+		Settings settings = _control->getSettings();
+		settings.power = Helper::deserializeInt(payload, length) != 0;
 		_control->applySettings(settings);
 	}
 }

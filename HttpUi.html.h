@@ -28,6 +28,7 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("color1").value = r.color1;
     document.getElementById("color2").value = r.color2;
     document.getElementById("fade_duration").value = r.fade_duration;
+    document.getElementById("power").checked = (r.power == 1);
   });
 });
 function saveConfig() {
@@ -35,6 +36,7 @@ function saveConfig() {
     "color1": document.getElementById("color1").value,
     "color2": document.getElementById("color2").value,
     "fade_duration": document.getElementById("fade_duration").value,
+    "power": document.getElementById("power").checked ? 1 : 0,
   };
   ajax("/api/config", "POST", args);
 }
@@ -44,6 +46,8 @@ function saveConfig() {
 <body class="container">
   <div class="row">
     <h1>LED Strip</h1>
+    <label for="power">Eingeschaltet:</label>
+    <div><input type="checkbox" id="power" name="power" value="1" /></div>
     <label for="color1">Farbe 1:</label>
     <div><input type="color" id="color1" name="color1" value="#ffffff" /></div>
     <label for="color2">Farbe 2:</label>
