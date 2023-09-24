@@ -53,9 +53,16 @@ void Control::applySettings(Settings settings)
 	saveSettings();
 
 	_animation_queue->abort();
-	_animation_queue->addAnimation(settings.color1, _animation_fastfade_duration, false);
-	_animation_queue->addAnimation(settings.color2, settings.fade_duration, true);
-	_animation_queue->addAnimation(settings.color1, settings.fade_duration, true);
+	if (settings.power)
+	{
+		_animation_queue->addAnimation(settings.color1, _animation_fastfade_duration, false);
+		_animation_queue->addAnimation(settings.color2, settings.fade_duration, true);
+		_animation_queue->addAnimation(settings.color1, settings.fade_duration, true);
+	}
+	else
+	{
+		_animation_queue->addAnimation(0, _animation_fastfade_duration, false);
+	}
 
 	for (int i = 0; i < _handlers.size(); ++i)
 		_handlers.get(i)(old_settings, settings);

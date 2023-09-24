@@ -30,8 +30,15 @@ void setup()
 	mqtt_ui.begin();
 
 	Settings settings = control.getSettings();
-	animationQueue.addAnimation(settings.color1, settings.fade_duration, true);
-	animationQueue.addAnimation(settings.color2, settings.fade_duration, true);
+	if (settings.power)
+	{
+		animationQueue.addAnimation(settings.color1, settings.fade_duration, true);
+		animationQueue.addAnimation(settings.color2, settings.fade_duration, true);
+	}
+	else
+	{
+		ledstrip.fadeToColor(0, 0);
+	}
 }
 
 void loop()
