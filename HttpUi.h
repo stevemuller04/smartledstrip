@@ -2,14 +2,14 @@
 #define INCLUDE_SRC_HTTPUI_H
 
 #include "Control.h"
-#include <ESP8266WebServer.h>
+#include <WebServer.h>
 
 class HttpUi
 {
 	private:
 
 		Control *_control;
-		ESP8266WebServer _server;
+		WebServer _server;
 
 		void _handleRoot();
 		void _handleApiSetConfig();

@@ -3,8 +3,6 @@
 
 #include "Settings.h"
 #include "AnimationQueue.h"
-#include <string.h> // required by <ESP_EEPROM.h>
-#include <ESP_EEPROM.h>
 #include <functional>
 
 using SettingsChangedHandler = std::function<void(Settings, Settings)>;

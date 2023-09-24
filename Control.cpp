@@ -1,4 +1,5 @@
 #include "Control.h"
+#include <Preferences.h>
 
 Control::Control(AnimationQueue *animation_queue, uint32_t animation_fastfade_duration) :
 	_animation_queue(animation_queue),
@@ -8,37 +9,33 @@ Control::Control(AnimationQueue *animation_queue, uint32_t animation_fastfade_du
 
 void Control::begin()
 {
-	EEPROM.begin(1 + sizeof(Settings));
 	loadSettings();
 }
 
 void Control::loadSettings()
 {
-	uint8_t version = 0xFF;
-	EEPROM.get(0, version);
+	Preferences pref;
+	pref.begin("main", true);
 
-	switch (version)
-	{
-		case 1:
-			EEPROM.get(1, _settings.color1);
-			EEPROM.get(5, _settings.color2);
-			EEPROM.get(9, _settings.fade_duration);
-			EEPROM.get(13, _settings.power);
-			break;
-		default:
-			_settings = Settings::default_settings;
-			break;
-	}
+	_settings.color1 = pref.getUInt("col1", Settings::default_settings.color1);
+	_settings.color2 = pref.getUInt("col2", Settings::default_settings.color2);
+	_settings.fade_duration = pref.getUInt("fdur", Settings::default_settings.fade_duration);
+	_settings.power = pref.getBool("power", Settings::default_settings.power);
+
+	pref.end();
 }
 
 void Control::saveSettings()
 {
-	EEPROM.put(0, 0x01); // version
-	EEPROM.put(1, _settings.color1);
-	EEPROM.put(5, _settings.color2);
-	EEPROM.put(9, _settings.fade_duration);
-	EEPROM.put(13, _settings.power);
-	EEPROM.commit();
+	Preferences pref;
+	pref.begin("main", false);
+
+	pref.putUInt("col1", _settings.color1);
+	pref.putUInt("col2", _settings.color2);
+	pref.putUInt("fdur", _settings.fade_duration);
+	pref.putBool("power", _settings.power);
+
+	pref.end();
 }
 
 void Control::addSettingsChangedHandler(SettingsChangedHandler handler)
